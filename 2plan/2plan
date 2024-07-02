@@ -1,6 +1,52 @@
 # coding: utf8
 import pygame
 import random
+def load_menu():
+    items = [(160, 140, 'Game', (0, 0, 0), (255, 0, 0), 0),(260, 240, "Quit", (0, 0, 0), (255, 0, 0), 1)]
+    # создать вторую кнопку]
+
+    pygame.mouse.set_visible(True)
+
+    done = False
+    item = 0
+    while not done:
+        # закрасить фон полностью (screen и score)
+        screen.fill([131, 35, 35])
+        score.fill([131, 35, 35])
+
+        for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                    if item == 0:
+                        done = True
+                    elif item == 1:
+                          pygame.quit()
+                    sys.exit()
+                        
+
+        pointer = pygame.mouse.get_pos()
+        for i in items:
+            if pointer[0]>i[0] and pointer[0]<i[0]+155 and pointer[1]>i[1] and pointer[1]<i[1]+50:
+                item = i[5]
+
+        for i in items:
+            if item == i[5]:
+                screen.blit(myFont.render(i[2], 1, i[4]), [i[0], i[1]-40])
+            else:
+                screen.blit(myFont.render(i[2], 1, i[3]), [i[0], i[1]-40])
+                
+        window.bilt(screen, [0, 40 ])
+        window.bilt(score, [0, 0])
+        pygame.display.flip()
+        
+                
+        # отобразить score и screen на window
+        # обновить дисплей
+
+
 
 # задааем размер окна, создаем окно размера size
 size = [400, 400]
@@ -35,7 +81,7 @@ def Intersect(s1_x, s2_x, s1_y, s2_y):
 enemy = Sprite(200, 10, 'png1.png')
 # переменные-"переключатели" движения для врага
 #enemy.right = True
-#enemy.up = False
+enemy.right = False
 
 
 count = 0
@@ -66,7 +112,7 @@ while running:
                     hero.y -= 1
             if e.key == pygame.K_DOWN:
                 if hero.y < 350:
-                    hero.y += 1
+                    hero.y += 1   
                 
 
     # задайте фоновый цвет
@@ -84,19 +130,18 @@ while running:
         if hero.y > 360:
             hero.up = True
     '''
-   
-    if enemy.up == True:
-        enemy.y -= 5
-        if enemy.y < 0:
-            enemy.up = False
-            enemy_new = True
-    else:
-        enemy.y += 5
-        if enemy.y > high:
-            enemy.up = True
-    
-
-
+                     
+    if enemy.right == True:
+        if enemy.x > 0:
+            enemy.x -= 5
+        else:
+            enemy.right = False
+    if enemy.right == False:
+        if enemy.x < 360:
+            enemy.x += 5
+        else:
+            enemy.right = True
+            
     # столкновение персонажей
     if Intersect(hero.x, enemy.x, hero.y, enemy.y):
         hero.up = False
@@ -116,3 +161,4 @@ while running:
 
 
 pygame.quit()
+
